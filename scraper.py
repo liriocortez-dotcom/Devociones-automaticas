@@ -282,8 +282,8 @@ def obtener_devociones() -> list[dict]:
 
     for url in links:
         # Si ya tenemos las 6 categorías, no seguir
-        #if len(categorias_encontradas) == 6:
-        #   break
+        if len(categorias_encontradas) == 6:
+           break
 
         articulo = _scrape_articulo(url)
         if not articulo:
