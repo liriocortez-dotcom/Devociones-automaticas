@@ -1,0 +1,34 @@
+name: Revisar Devociones
+
+on:
+  schedule:
+    # 6:00 AM hora de Ciudad de México (UTC-6) = 12:00 PM UTC
+    - cron: "0 12 * * *"
+  workflow_dispatch:   # Permite ejecución manual desde la UI de GitHub Actions
+
+jobs:
+  revisar:
+    name: Extraer y notificar por Telegram
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Crear directorio de datos
+        run: mkdir -p data
+
+      - name: Ejecutar revisión
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python main.py revisar
