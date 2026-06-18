@@ -68,6 +68,8 @@ def modo_publicar() -> None:
 
     publicadas = facebook.publicar_devociones(devociones)
 
+    telegram_bot.enviar_resumen(devociones)
+
     logger.info(
         "═══ PUBLICACIÓN COMPLETADA: %d/%d ═══",
         len(publicadas),
