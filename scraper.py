@@ -242,6 +242,7 @@ def _obtener_links_recientes() -> list[str]:
             if href.startswith("http") and href not in vistos:
                 vistos.add(href)
                 links.append(href)
+                logger.info("LINK: %s", href)
 
     # Estrategia 2: enlaces con clases típicas de títulos de posts
     if not links:
@@ -264,6 +265,9 @@ def _obtener_links_recientes() -> list[str]:
                 links.append(href)
 
     logger.info("Links encontrados en página principal: %d", len(links))
+
+    for i, link in enumerate(links[:25], start=1):
+        logger.info("LINK %d: %s", i, link)
     return links
 
 
@@ -282,18 +286,15 @@ def obtener_devociones() -> list[dict]:
 
     for url in links:
         # Si ya tenemos las 6 categorías, no seguir
-        if len(categorias_encontradas) == 6:
-           break
+        # if len(categorias_encontradas) == 6:
+        #  break
 
         articulo = _scrape_articulo(url)
         if not articulo:
             continue
 
         cat = articulo["categoria"]
-        if cat in categorias_encontradas:
-            logger.debug("Categoría '%s' ya registrada, omitiendo %s.", cat, url)
-            continue
-
+       
         categorias_encontradas[cat] = articulo
         logger.info("✔ Categoría '%s' extraída desde %s", cat, url)
 
